@@ -1,9 +1,29 @@
 const express = require("express");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const cors = require("cors");
+const User = require("./configs");
+const firebase = require("firebase");
 const app = express();
 
-app.listen(process.env.PORT || 5000, () =>
-  console.log(`listenings on port := ${process.env.PORT}`)
-);
+app.use(express.json());
+app.use(cors());
+
+const loginRoute = require('./app/routes/entry/login');
+const registerRoute = require('./app/routes/entry/register');
+const sellerRoutes = require('./app/routes/users/seller');
+const UsersRoutes = require('./app/routes/users/users');
+const ProductsRoutes = require('./app/routes/modules/products');
+const CartRoutes = require('./app/routes/modules/productcart');
+const WatchlistRoutes = require('./app/routes/modules/watchlist');
+
+
+app.use('/api/login', loginRoute);
+app.use('/api/register', registerRoute);
+app.use('/api/sellers', sellerRoutes);
+app.use('/api/detail/', UsersRoutes)
+app.use('/api/products/', ProductsRoutes)
+app.use('/api/cart/', CartRoutes)
+app.use('/api/watchlist/', WatchlistRoutes)
+
+app.listen(9000,()=>{
+    console.log("listening running on 9000")
+})
