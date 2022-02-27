@@ -1,18 +1,13 @@
 const firebase = require("firebase");
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAfFw-N99MlfTkzTjzTseiMQPl_pZPtQ98",
-  authDomain: "clone-aba44.firebaseapp.com",
-  projectId: "clone-aba44",
-  storageBucket: "clone-aba44.appspot.com",
-  messagingSenderId: "922557697621",
-  appId: "1:922557697621:web:3ed7435f42e20133540edc",
-  measurementId: "G-QLPPMD8R2G"
+  apiKey: "AIzaSyAahTG8Aj3Y4nnixS6G6wA2WhpkLuHisVo",
+  authDomain: "nile-5180d.firebaseapp.com",
+  projectId: "nile-5180d",
+  storageBucket: "nile-5180d.appspot.com",
+  messagingSenderId: "671762286898",
+  appId: "1:671762286898:web:4c026eac2882a9d0b8ef2b",
+  measurementId: "G-2T537QLVXY"
 };
 
 firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
-// const Seller = db.collection("Seller");
-
-// module.exports = Seller;
-// module.exports = Users;
