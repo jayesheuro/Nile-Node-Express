@@ -1,7 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const dotenv = require('dotenv')
+dotenv.config()
+
 const User = require("./configs");
 const firebase = require("firebase");
+
 const app = express();
 
 app.use(express.json());
@@ -24,6 +28,6 @@ app.use('/api/products/', ProductsRoutes)
 app.use('/api/cart/', CartRoutes)
 app.use('/api/watchlist/', WatchlistRoutes)
 
-app.listen(9000,()=>{
-    console.log("listening running on 9000")
+app.listen(process.env.PORT,()=>{
+    console.log(`listening running on ${process.env.PORT}`)
 })
