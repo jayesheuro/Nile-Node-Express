@@ -64,22 +64,28 @@ module.exports.updateSellerInfo = async (req,res) =>{
     if (user){
         const uid = user.uid;
         const db = firebase.firestore();
-        const Users = db.collection("Sellers");
+        const Sellers = db.collection("Sellers");
 
         const data = []
         let id= ''
-        let add_info = ["address_line_1", "city", "country", "locality", "pincode", "state"]
-        let business_info = ["business_name", "sector"]
-        let contact=  ["email", "mobile_no", "alternate_mobile_no"]
-        const snapshot = await Users.where('sellerId', '==', uid).get();
+        const snapshot = await Sellers.where('sellerId', '==', uid).get();
         snapshot.forEach(doc => {
-            data.push({addrss: doc.data().address , business : doc.data().business, contact : doc.data().contact} )
+            data.push({address: doc.data().address , business : doc.data().business, contact : doc.data().contact} )
             id = doc.id 
 
+
             console.log(data[0])
-            console.log(id)
+            data[0] = req.body 
+            console.log(data[0])
+              
+
+            Sellers.doc(id).update(
+                data[0]
+            )
+
+
             res.status(200).json({
-                status: data[0]
+                status: "Seller information updated"
             })
           });
     }
