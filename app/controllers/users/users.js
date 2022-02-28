@@ -7,9 +7,11 @@ module.exports.Users = async (req,res)=>{
         const email = user.email;
         const uid = user.uid;
 
-        req.body.contact['email'] = email;
+        req.body.Personal_details['email'] = email;
         req.body['userId'] = uid;
-        console.log(req.body)
+        req.body['other_product_info'] = ''
+        req.body['product_selected'] = []
+        req.body['watch_list'] = []
 
         const db = firebase.firestore();
         const Users = db.collection("Users");
@@ -35,10 +37,13 @@ module.exports.getUsersInfo = async (req,res)=>{
         const db = firebase.firestore();
         const Users = db.collection("Users");
 
+        const data = []
         const snapshot = await Users.where('userId', '==', uid).get();
         snapshot.forEach(doc => {
+            data.push({Personal_details: doc.data().Personal_details} )
+
             res.status(200).json({
-                status: doc.data()
+                status: data[0]
             })
           });
     }
@@ -49,4 +54,36 @@ module.exports.getUsersInfo = async (req,res)=>{
     }
 } 
 
+
+
+module.exports.updateUsersInfo = async (req,res)=>{
+    const user = firebase.auth().currentUser;
+    if (user){
+        const uid = user.uid;
+        const db = firebase.firestore();
+        const Users = db.collection("Users");
+        const snapshot = await Users.where('userId', '==', uid).get();
+
+        snapshot.forEach(doc => {
+            var data = doc.data().Personal_details 
+         
+            for (const prop in req.body) {
+                data[ prop ] = req.body[prop]
+              }
+            
+            console.log(data)
+            Users.doc(doc.id).update(
+                { Personal_details: data }
+                )
+
+            res.status(200).json({
+                status: "User Information updated successfully"
+            })
+        })
+    }
+    res.status(500).json({
+        status: "Something went wrong"
+    })
+
+}
 
