@@ -30,7 +30,7 @@ const UsersRoutes = require('./app/routes/users/users');
 const ProductsRoutes = require('./app/routes/modules/products');
 const CartRoutes = require('./app/routes/modules/productcart');
 const WatchlistRoutes = require('./app/routes/modules/watchlist');
-const TransactionRoutes = require('./app/routes/modules/transaction');
+const Payment_methodRoutes = require('./app/routes/modules/payment_method');
 
 
 app.use('/api/login', loginRoute);
@@ -40,7 +40,7 @@ app.use('/api/detail/', UsersRoutes)
 app.use('/api/products', ProductsRoutes)
 app.use('/api/cart/', CartRoutes)
 app.use('/api/watchlist/', WatchlistRoutes)
-app.use('/api/transaction/', TransactionRoutes)
+app.use('/api/payment/', Payment_methodRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`listening running on ${process.env.PORT}`)

@@ -16,19 +16,19 @@ module.exports.userTansaction = async (req,res) =>{
                 const id = doc.id;
 
                 if (req.params.payment_type == "netbanking"){
-                    users_data['Transactions'].push( {netbanking : req.body.netbanking})
+                    users_data['Payment_method'].push( {netbanking : req.body.netbanking})
                 }
 
                 else if(req.params.payment_type == "debit_card"){
-                    users_data['Transactions'].push( {debit_card : req.body.debit_card} )
+                    users_data['Payment_method'].push( {debit_card : req.body.debit_card} )
                 }
 
                 else if(req.params.payment_type == "credit_card"){
-                    users_data['Transactions'].push( {credit_card : req.body.credit_card} )
+                    users_data['Payment_method'].push( {credit_card : req.body.credit_card} )
                 }
 
                 else if(req.params.payment_type == "upi"){
-                    users_data['Transactions'].push( {upi : req.body.upi} )
+                    users_data['Payment_method'].push( {upi : req.body.upi} )
                 }
                 
                 Users.doc(id).update(
@@ -63,7 +63,7 @@ module.exports.displayUserTansaction = async (req,res) =>{
     
         const snapshot = await Users.where('userId', '==', uid).get();
         snapshot.forEach(doc => {
-            data.push({Transactions: doc.data().Transactions} )
+            data.push({Transactions: doc.data().Payment_method} )
 
             res.status(200).json({
                 status: data[0]
@@ -92,7 +92,7 @@ module.exports.updateUserTansaction = async (req,res) =>{
         let data = []
         let id = ''
         snapshot.forEach(doc => {
-            data.push(doc.data().Transactions )
+            data.push(doc.data().Payment_method )
             id = doc.id
         })
         
@@ -110,7 +110,7 @@ module.exports.updateUserTansaction = async (req,res) =>{
         console.log(data[0])
         
         Users.doc(id).update(
-            {Transactions  : data[0]}
+            {Payment_method  : data[0]}
         )
 
         res.status(200).json({
@@ -145,7 +145,7 @@ module.exports.deleteUserTansaction = async (req,res) =>{
         let data = []
         let id = ''
         snapshot.forEach(doc => {
-            data.push(doc.data().Transactions )
+            data.push(doc.data().Payment_method )
             id = doc.id
         })
         
@@ -162,7 +162,7 @@ module.exports.deleteUserTansaction = async (req,res) =>{
         console.log(data[0])
         
         Users.doc(id).update(
-            {Transactions  : data[0]}
+            {Payment_method  : data[0]}
         )
 
         res.status(200).json({

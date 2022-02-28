@@ -12,7 +12,7 @@ module.exports.Users = async (req,res)=>{
         req.body['other_product_info'] = ''
         req.body['product_selected'] = []
         req.body['watch_list'] = []
-        req.body['Transactions'] = [ {netbanking : {}, debit_card : {}, credit_card : {}, upi : {}}  ]
+        req.body['Payment_method'] = []
 
         const db = firebase.firestore();
         const Users = db.collection("Users");
