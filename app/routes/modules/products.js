@@ -14,5 +14,6 @@ router.get('/all/:category',ProductController.searchProductByCategory)
 router.get('/:category/:id',ProductController.getProduct)
 router.put('/:category/:id',ProductController.updateProduct)
 router.delete('/:category/:id',ProductController.deleteProduct)
+router.get('/search',ProductController.universalProductSearch)
 
 module.exports = router;

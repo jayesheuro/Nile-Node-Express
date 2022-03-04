@@ -22,7 +22,6 @@ function authCollectionName(collection_name) {
     return true
 }
 
-
 const getProduct = (req, res) => {
     let category = req.params.category
     let product_id = req.params.id
@@ -51,7 +50,7 @@ const getProduct = (req, res) => {
 const getProductFromList = async (req, res) => {
     let required_products = req.body
     let data_arr = []
-    for(let i=0;i<required_products.length;i++){
+    for (let i = 0; i < required_products.length; i++) {
         let product = required_products[i]
         let category = product.category
         let product_id = product.product_id
@@ -70,8 +69,8 @@ const getProductFromList = async (req, res) => {
             })
     }
     res.send({
-        message:"products found",
-        products:data_arr
+        message: "products found",
+        products: data_arr
     })
 }
 
@@ -327,6 +326,32 @@ const searchProductByName = (req, res) => {
     }
 }
 
+const universalProductSearch = async(req, res) => {
+    let queryString = req.query.name
+    let foundData = []
+    for (let i = 0; i < availableCollections.length; i++) {
+        const collectionRef = mongoose.model(availableCollections[i], ProductSchema)
+
+        await collectionRef.find({ "messDetails.messName": { $regex: queryString, $options: '$i' } })
+            .select("-__v")
+            .then(docs => {
+                if(docs.length>0){
+                    let dataObj={
+                        "category":availableCollections[i],
+                        "data":docs
+                    }
+                    foundData.push(dataObj)
+                } 
+            }).catch(err => {
+                return res.send(err)
+            })
+    }
+    res.send({
+        message:"results",
+        results:foundData
+    })
+}
+
 module.exports = {
     getProduct,
     getProductFromList,
@@ -335,7 +360,8 @@ module.exports = {
     deleteProduct,
     searchProductByCategory,
     searchProductByName,
-    changeProductCategory
+    changeProductCategory,
+    universalProductSearch
 }
 
 
