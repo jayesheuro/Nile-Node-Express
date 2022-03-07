@@ -8,7 +8,7 @@ router.post('/add', UsersRoutes.Users);
 
 
 router.get('/users', UsersRoutes.getUsersInfo);
-router.put('/update', UsersRoutes.updateUsersInfo);
-
+router.put('/update/:ind', UsersRoutes.updateUsersInfo);
+router.delete('/delete/:ind', UsersRoutes.deleteUsersInfo);
 
 module.exports = router;

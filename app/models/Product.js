@@ -21,7 +21,11 @@ const ProductSchema = mongoose.Schema({
     rating_id: String,
     technical_details:{
         // keys and values will vary depending on product
-    }
+    },
+    available_quantity:{
+        type:Number,
+        required:true
+    },
 })
 
 module.exports = ProductSchema
