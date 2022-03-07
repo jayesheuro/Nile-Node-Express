@@ -4,7 +4,7 @@ const firebase = require("firebase");
 const mongoose = require('mongoose')
 const ProductSchema = require('../../models/Product')
 
-const availableCollections = ["electronics", "mens_fashion", "womens_fashion", "kids_fashion", "toys_and_games", "appliances", "sports", "other"]
+const availableCollections = ["electronics", "mens_fashions", "womens_fashions", "kids_fashions", "toys_and_games", "appliances", "sports", "other"]
 
 function getCollection(collection_name) {
     collection_name = collection_name.toLowerCase()
