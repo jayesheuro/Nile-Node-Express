@@ -11,8 +11,3 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
-// const Seller = db.collection("Seller");
-
-// module.exports = Seller;
-// module.exports = Users;
