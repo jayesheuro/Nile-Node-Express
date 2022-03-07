@@ -6,6 +6,30 @@ const ProductSchema = require('../../models/Product')
 
 const availableCollections = ["electronics", "mens_fashions", "womens_fashions", "kids_fashions", "toys_and_games", "appliances", "sports", "other"]
 
+async function saveProductToFirebase(product, inventory_id){
+    
+        console.log(product.product_id.toString(), inventory_id)
+
+        const db = firebase.firestore();
+        const Inventory = db.collection("Inventory");
+        const snapshot2 = await Inventory.where("inventory_id", "==", inventory_id).get();
+        let prev_products = []
+        let id = ''
+
+        snapshot2.forEach((doc)=>{
+            prev_products = doc.data().products 
+            id = doc.id
+            // if(inv_data.length>0){
+            //     Userorders.push(inv_data[0])
+            // }
+        })
+        
+        prev_products.push(product)
+        console.log(prev_products)
+        Inventory.doc(id).update({products : prev_products})
+}
+
+
 function getCollection(collection_name) {
     collection_name = collection_name.toLowerCase()
     if (!availableCollections.includes(collection_name)) {
@@ -79,15 +103,17 @@ const createProduct = async (req, res) => {
     let collection_name = getCollection(req.body.product_category)
     const ProductInstance = mongoose.model(collection_name, ProductSchema)
 
+    let product_id = new mongoose.Types.ObjectId
     const product = new ProductInstance({
-        product_id: new mongoose.Types.ObjectId,
+        product_id: product_id ,
         name: req.body.product_name,
         images: req.body.product_images,
         price: req.body.product_price,
         category: req.body.product_category,
         tags: req.body.product_tags,
         rating_id: req.body.product_rating_id,
-        technical_details: req.body.technical_details
+        technical_details: req.body.technical_details,
+        available_quantity : req.body.available_quantity
     })
 
     await product.save()
@@ -96,6 +122,9 @@ const createProduct = async (req, res) => {
         }).catch(err => {
             return res.send(err)
         })
+
+    await saveProductToFirebase({product_id: product_id.toString(), category:req.body.product_category, available_quantity : req.body.available_quantity}, req.body.inventory_id )
+
 }
 
 // cannot update product name, category, rating_id, product_id

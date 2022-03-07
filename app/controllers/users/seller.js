@@ -1,20 +1,23 @@
 const checkUser = require("../entry/state"); 
 const firebase = require("firebase");
 const Seller = require("../../../configs");
-
+const { v4: uuidv4 } = require('uuid');
 
 module.exports.seller = async (req,res)=>{
     const user = firebase.auth().currentUser;
     if (user){
         const email = user.email;
         const uid = user.uid;
-
+        let inv_id =  uuidv4();
         req.body.contact['email'] = email;
         req.body['sellerId'] = uid;
-        req.body["inventory_id"] = ''
+        req.body["inventory_id"] = inv_id
         const db = firebase.firestore();
         const Sellers = db.collection("Sellers");
+        const Inventory = db.collection("Inventory");
+
         await Sellers.add(req.body);
+        await Inventory.add({inventory_id: inv_id, Userorders : []});
         res.status(200).json({
             status: "Seller information added successfully"
         })
@@ -26,6 +29,10 @@ module.exports.seller = async (req,res)=>{
     }
 }
 
+
+module.exports.addProduct = async(req,res)=>{
+    const id = req.body.product_id
+}
 
 
 module.exports.displaySellerInfo = async (req,res) =>{

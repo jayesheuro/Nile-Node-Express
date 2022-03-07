@@ -7,7 +7,7 @@ module.exports.Customerlogin = (req, res)=>{
     .then((userCredential) => {
       
       res.status(200).json({
-        status: "Logged in successfully"
+        status: req.body.email
     })
     })
     .catch((error) => {
