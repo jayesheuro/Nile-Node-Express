@@ -4,7 +4,7 @@ const firebase = require("firebase");
 const mongoose = require('mongoose')
 const ProductSchema = require('../../models/Product')
 
-const availableCollections = ["electronics", "mens_fashion", "womens_fashion", "kids_fashion", "toys_and_games", "appliances", "sports", "other"]
+const availableCollections = ["electronics", "mens_fashions", "womens_fashions", "kids_fashions", "toys_and_games", "appliances", "sports", "other"]
 
 async function saveProductToFirebase(product, inventory_id){
     
@@ -46,7 +46,6 @@ function authCollectionName(collection_name) {
     return true
 }
 
-
 const getProduct = (req, res) => {
     let category = req.params.category
     let product_id = req.params.id
@@ -70,6 +69,33 @@ const getProduct = (req, res) => {
         }).catch(err => {
             return res.send(err)
         })
+}
+
+const getProductFromList = async (req, res) => {
+    let required_products = req.body
+    let data_arr = []
+    for (let i = 0; i < required_products.length; i++) {
+        let product = required_products[i]
+        let category = product.category
+        let product_id = product.product_id
+
+        let collection_name = getCollection(category)
+        const collectionRef = mongoose.model(collection_name, ProductSchema)
+
+        await collectionRef.findOne({ product_id: mongoose.Types.ObjectId(product_id) })
+            .select("-__v")
+            .then(doc => {
+                if (doc !== null) {
+                    data_arr.push(doc)
+                }
+            }).catch(err => {
+                return res.send(err)
+            })
+    }
+    res.send({
+        message: "products found",
+        products: data_arr
+    })
 }
 
 const createProduct = async (req, res) => {
@@ -216,7 +242,7 @@ const changeProductCategory = async (req, res) => {
                 return res.send("some error occured")
             })
 
-        
+
         // deleting the document from the from_collection
         await collectionRefFrom.findOneAndDelete({ product_id: mongoose.Types.ObjectId(product_id) })
             .then(doc => {
@@ -224,7 +250,7 @@ const changeProductCategory = async (req, res) => {
                     return res.send({
                         message: "changed product category",
                         old_doc: doc,
-                        new_doc:new_doc
+                        new_doc: new_doc
                     })
                 } else {
                     return res.send({
@@ -329,14 +355,42 @@ const searchProductByName = (req, res) => {
     }
 }
 
+const universalProductSearch = async(req, res) => {
+    let queryString = req.query.name
+    let foundData = []
+    for (let i = 0; i < availableCollections.length; i++) {
+        const collectionRef = mongoose.model(availableCollections[i], ProductSchema)
+
+        await collectionRef.find({ "messDetails.messName": { $regex: queryString, $options: '$i' } })
+            .select("-__v")
+            .then(docs => {
+                if(docs.length>0){
+                    let dataObj={
+                        "category":availableCollections[i],
+                        "data":docs
+                    }
+                    foundData.push(dataObj)
+                } 
+            }).catch(err => {
+                return res.send(err)
+            })
+    }
+    res.send({
+        message:"results",
+        results:foundData
+    })
+}
+
 module.exports = {
     getProduct,
+    getProductFromList,
     createProduct,
     updateProduct,
     deleteProduct,
     searchProductByCategory,
     searchProductByName,
-    changeProductCategory
+    changeProductCategory,
+    universalProductSearch
 }
 
 
