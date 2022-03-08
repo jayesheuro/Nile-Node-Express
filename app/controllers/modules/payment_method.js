@@ -6,32 +6,36 @@ module.exports.userTansaction = async (req, res) => {
     const uid = user.uid;
     const db = firebase.firestore();
     const Users = db.collection("Users");
+    let Payment_method = []
+    let id = ''
 
     const snapshot = await Users.where('userId', '==', uid).get();
     snapshot.forEach(doc => {
         if (doc.data()) {
 
-            const users_data = doc.data()
-            const id = doc.id;
+            if (doc.data().Payment_method.length > 0) {
+                doc.data().Payment_method.map(it => {
+                    Payment_method.push(it)
 
-            if (req.params.payment_type == "netbanking") {
-                users_data['Payment_method'].push({ netbanking: req.body.netbanking })
+                })
+            }
+            id = doc.id;
+
+            if (req.body.BankingInfo.payment_type == "netbanking") {
+                Payment_method.push({ BankingInfo: req.body.BankingInfo })
             }
 
-            else if (req.params.payment_type == "debit_card") {
-                users_data['Payment_method'].push({ debit_card: req.body.debit_card })
+            else if (req.body.BankingInfo.payment_type == "debit/credit_card") {
+                Payment_method.push({ BankingInfo: req.body.BankingInfo })
             }
 
-            else if (req.params.payment_type == "credit_card") {
-                users_data['Payment_method'].push({ credit_card: req.body.credit_card })
+            else if (req.body.BankingInfo.payment_type == "upi") {
+                Payment_method.push({ BankingInfo: req.body.BankingInfo })
             }
 
-            else if (req.params.payment_type == "upi") {
-                users_data['Payment_method'].push({ upi: req.body.upi })
-            }
-
+            console.log(Payment_method)
             Users.doc(id).update(
-                users_data
+                { Payment_method }
             )
 
             res.status(200).json({
@@ -50,7 +54,7 @@ module.exports.displayUserTansaction = async (req, res) => {
     const data = []
 
     const snapshot = await Users.where('userId', '==', uid).get();
-    
+
     snapshot.forEach(doc => {
         console.log("here")
         data.push({ Transactions: doc.data().Payment_method })
@@ -111,23 +115,14 @@ module.exports.deleteUserTansaction = async (req, res) => {
         id = doc.id
     })
 
-    let payment_type = req.params.payment_type
-
-    data[0].forEach(key => {
-        delete key[payment_type]
-    })
-
-    data[0] = data[0].filter(
-        obj => !(obj && Object.keys(obj).length === 0)
-    );
-
-    console.log(data[0])
+    let ind = req.params.payment_type
+    data[0].splice(ind, 1)
 
     Users.doc(id).update(
         { Payment_method: data[0] }
     )
 
     res.status(200).json({
-        status: "Success"
+        status: data
     })
 }
