@@ -1,7 +1,7 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-module.exports.userCarts = async (req, res) => {
+const userCarts = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -46,9 +46,7 @@ module.exports.userCarts = async (req, res) => {
     });
 }
 
-
-
-module.exports.displayUserCarts = async (req, res) => {
+const displayUserCarts = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -66,7 +64,7 @@ module.exports.displayUserCarts = async (req, res) => {
     });
 }
 
-module.exports.updateUserCarts = async (req, res) => {
+const updateUserCarts = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -105,7 +103,7 @@ module.exports.updateUserCarts = async (req, res) => {
     })
 }
 
-module.exports.deleteUserCarts = async (req, res) => {
+const deleteUserCarts = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -142,4 +140,11 @@ module.exports.deleteUserCarts = async (req, res) => {
             status: "Product deleted successfully"
         })
     });
+}
+
+module.exports = {
+    userCarts,
+    displayUserCarts,
+    updateUserCarts,
+    deleteUserCarts
 }

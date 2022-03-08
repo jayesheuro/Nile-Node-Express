@@ -2,41 +2,7 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 const { v4: uuidv4 } = require("uuid");
 
-// module.exports.AddCustomerOrders = async (req,res) =>{
-//     const user = firebase.auth().currentUser;
-//     if (user){
-//         const uid = user.uid;
-//         const db = firebase.firestore();
-//         const Users = db.collection("Users");
-
-//         const snapshot = await Users.where('userId', '==', uid).get();
-//         snapshot.forEach(doc => {
-//             if (doc.data()){
-
-//                 const users_data = doc.data()
-//                 const id = doc.id;
-
-//                 users_data['orders'].push( req.body.orders)
-//                 console.log(users_data)
-
-//                 Users.doc(id).update(
-//                 users_data
-//                 )
-//                         res.status(200).json({
-//                         status: "Success"
-//                     })
-//             }
-//     });
-
-//     }
-//     else{
-//         res.status(500).json({
-//             status: "Something went wrong"
-//         })
-//     }
-// }
-
-module.exports.displayCustomerOrders = async (req, res) => {
+const displayCustomerOrders = async (req, res) => {
   const user = firebase.auth().currentUser;
   const uid = user.uid;
   const db = firebase.firestore();
@@ -54,7 +20,7 @@ module.exports.displayCustomerOrders = async (req, res) => {
   });
 };
 
-module.exports.updateCustomerOrders = async (req, res) => {
+const updateCustomerOrders = async (req, res) => {
   const user = firebase.auth().currentUser;
   const uid = user.uid;
   const db = firebase.firestore();
@@ -88,7 +54,7 @@ module.exports.updateCustomerOrders = async (req, res) => {
   });
 };
 
-module.exports.deleteCustomerOrders = async (req, res) => {
+const deleteCustomerOrders = async (req, res) => {
   const user = firebase.auth().currentUser;
   const uid = user.uid;
   const db = firebase.firestore();
@@ -121,9 +87,7 @@ module.exports.deleteCustomerOrders = async (req, res) => {
   });
 };
 
-
-
-module.exports.AddCustomerOrders = async (req, res) => {
+const addCustomerOrders = async (req, res) => {
   const user = firebase.auth().currentUser;
   Userorders = [];
   const uid = "OxQdsSxiBygKhHuOVNUVuMziWuf2";
@@ -232,3 +196,10 @@ module.exports.AddCustomerOrders = async (req, res) => {
     orders: orders,
   });
 };
+
+module.exports = {
+  displayCustomerOrders,
+  updateCustomerOrders,
+  deleteCustomerOrders,
+  addCustomerOrders
+}

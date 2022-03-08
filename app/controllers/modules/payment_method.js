@@ -1,7 +1,7 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-module.exports.userTansaction = async (req, res) => {
+const userTansaction = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -45,7 +45,7 @@ module.exports.userTansaction = async (req, res) => {
     });
 }
 
-module.exports.displayUserTansaction = async (req, res) => {
+const displayUserTansaction = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -65,7 +65,7 @@ module.exports.displayUserTansaction = async (req, res) => {
     });
 }
 
-module.exports.updateUserTansaction = async (req, res) => {
+const updateUserTansaction = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -101,7 +101,7 @@ module.exports.updateUserTansaction = async (req, res) => {
     })
 }
 
-module.exports.deleteUserTansaction = async (req, res) => {
+const deleteUserTansaction = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -125,4 +125,11 @@ module.exports.deleteUserTansaction = async (req, res) => {
     res.status(200).json({
         status: data
     })
+}
+
+module.exports = {
+    userTansaction,
+    displayUserTansaction,
+    updateUserTansaction,
+    deleteUserTansaction
 }

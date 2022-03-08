@@ -1,7 +1,7 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-module.exports.addTransactionHistory = async (req, res) => {
+const addTransactionHistory = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -26,7 +26,7 @@ module.exports.addTransactionHistory = async (req, res) => {
     });
 }
 
-module.exports.displayTansactionHistory = async (req, res) => {
+const displayTansactionHistory = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -44,7 +44,7 @@ module.exports.displayTansactionHistory = async (req, res) => {
     });
 }
 
-module.exports.updateTansactionHistory = async (req, res) => {
+const updateTansactionHistory = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -83,7 +83,7 @@ module.exports.updateTansactionHistory = async (req, res) => {
     })
 }
 
-module.exports.deleteTansactionHistory = async (req, res) => {
+const deleteTansactionHistory = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -118,4 +118,11 @@ module.exports.deleteTansactionHistory = async (req, res) => {
     res.status(200).json({
         status: "Success"
     })
+}
+
+module.exports = {
+    addTransactionHistory,
+    displayTansactionHistory,
+    updateTansactionHistory,
+    deleteTansactionHistory
 }
