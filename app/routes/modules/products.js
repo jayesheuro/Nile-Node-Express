@@ -10,6 +10,7 @@ const ProductController = require('../../controllers/modules/products');
 router.post('/', ProductController.createProduct)
 router.patch('/',ProductController.changeProductCategory)
 router.get('/',ProductController.getProductFromList)
+router.get('/landing',ProductController.getProductFromAllCategories)
 router.get('/all/:category',ProductController.searchProductByCategory)
 router.get('/:category/:id',ProductController.getProduct)
 router.put('/:category/:id',ProductController.updateProduct)

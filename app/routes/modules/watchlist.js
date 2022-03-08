@@ -5,9 +5,11 @@ const router = express.Router();
 const WatchlistRoutes = require('../../controllers/modules/watchlist');
 router.use(bodyParser.json());
 
-router.post('/watchlists', WatchlistRoutes.userWatchlist);
-router.get('/', WatchlistRoutes.displayUserWatchlist);
-router.put('/update/:ind', WatchlistRoutes.updateUserWatchlist);
-router.delete('/delete/:product_id', WatchlistRoutes.deleteUserWatchlist);
+const auth = require('../../services/auth/firebaseAuth')
+
+router.post('/watchlists',auth.checkAuthWithFirebase, WatchlistRoutes.userWatchlist);
+router.get('/',auth.checkAuthWithFirebase, WatchlistRoutes.displayUserWatchlist);
+router.put('/update/:ind',auth.checkAuthWithFirebase, WatchlistRoutes.updateUserWatchlist);
+router.delete('/delete/:product_id',auth.checkAuthWithFirebase, WatchlistRoutes.deleteUserWatchlist);
 
 module.exports = router;
