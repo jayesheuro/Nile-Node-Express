@@ -17,6 +17,10 @@ const ProductSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    highlights:[String],
+    brand:{
+        type:String,
+    },
     tags:[String],
     rating_id: String,
     technical_details:{
@@ -26,6 +30,13 @@ const ProductSchema = mongoose.Schema({
         type:Number,
         required:true
     },
+    buying_options:{
+        color:{
+            type: [String]   
+        },size:{
+            type: [String]
+        }
+    }
 })
 
 module.exports = ProductSchema
