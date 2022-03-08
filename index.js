@@ -31,6 +31,8 @@ const ProductsRoutes = require('./app/routes/modules/products');
 const CartRoutes = require('./app/routes/modules/productcart');
 const WatchlistRoutes = require('./app/routes/modules/watchlist');
 const Payment_methodRoutes = require('./app/routes/modules/payment_method');
+const TransactionHistoryRoutes = require('./app/routes/modules/transaction_history');
+const CustomerOrdersRoutes = require('./app/routes/modules/customer_orders');
 
 
 app.use('/api/login', loginRoute);
@@ -41,6 +43,8 @@ app.use('/api/products', ProductsRoutes)
 app.use('/api/cart/', CartRoutes)
 app.use('/api/watchlist/', WatchlistRoutes)
 app.use('/api/payment/', Payment_methodRoutes)
+app.use('/api/transaction/', TransactionHistoryRoutes)
+app.use('/api/orders/', CustomerOrdersRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`listening running on ${process.env.PORT}`)
