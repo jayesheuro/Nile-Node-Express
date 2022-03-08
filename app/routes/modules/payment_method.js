@@ -5,10 +5,12 @@ const router = express.Router();
 const TransactionRoutes = require('../../controllers/modules/payment_method');
 router.use(bodyParser.json());
 
-router.post('/payment/:payment_type', TransactionRoutes.userTansaction);
-router.get('/', TransactionRoutes.displayUserTansaction);
-router.put('/payment/update/:payment_type', TransactionRoutes.updateUserTansaction)
-router.delete('/payment/delete/:payment_type', TransactionRoutes.deleteUserTansaction)
+const auth = require('../../services/auth/firebaseAuth')
+
+router.post('/', auth.checkAuthWithFirebase, TransactionRoutes.userTansaction);
+router.get('/', auth.checkAuthWithFirebase, TransactionRoutes.displayUserTansaction);
+router.put('/update/:payment_type', auth.checkAuthWithFirebase, TransactionRoutes.updateUserTansaction)
+router.delete('/delete/:payment_type', auth.checkAuthWithFirebase, TransactionRoutes.deleteUserTansaction)
 
 
 module.exports = router;
