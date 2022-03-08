@@ -326,7 +326,7 @@ const searchProductByName = (req, res) => {
     }
 }
 
-const universalProductSearch = async(req, res) => {
+const universalProductSearch = async (req, res) => {
     let queryString = req.query.name
     let foundData = []
     for (let i = 0; i < availableCollections.length; i++) {
@@ -335,21 +335,42 @@ const universalProductSearch = async(req, res) => {
         await collectionRef.find({ "messDetails.messName": { $regex: queryString, $options: '$i' } })
             .select("-__v")
             .then(docs => {
-                if(docs.length>0){
-                    let dataObj={
-                        "category":availableCollections[i],
-                        "data":docs
+                if (docs.length > 0) {
+                    let dataObj = {
+                        "category": availableCollections[i],
+                        "data": docs
                     }
                     foundData.push(dataObj)
-                } 
+                }
             }).catch(err => {
                 return res.send(err)
             })
     }
     res.send({
-        message:"results",
-        results:foundData
+        message: "results",
+        results: foundData
     })
+}
+
+const getProductFromAllCategories = async (req, res) => {
+    let limit = req.query.limit
+    let data = {}
+    for (let i = 0; i < availableCollections.length; i++) {
+        let collectionName = availableCollections[i]
+        let products = []
+        const collectionRef = mongoose.model(collectionName, ProductSchema)
+
+        await collectionRef.find()
+            .limit(limit)
+            .then(docs => {
+                products = docs
+            }).catch(err => {
+                console.log(err)
+            })
+
+        data[collectionName] = products
+    }
+    res.send(data)
 }
 
 module.exports = {
@@ -361,7 +382,8 @@ module.exports = {
     searchProductByCategory,
     searchProductByName,
     changeProductCategory,
-    universalProductSearch
+    universalProductSearch,
+    getProductFromAllCategories
 }
 
 
