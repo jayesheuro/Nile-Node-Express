@@ -3,8 +3,10 @@ const router = express.Router();
 
 const sellerRoutes = require('../../controllers/users/seller');
 
-router.post('/seller', sellerRoutes.seller);
-router.get('/', sellerRoutes.displaySellerInfo);
-router.put('/update', sellerRoutes.updateSellerInfo);
+const auth = require('../../services/auth/firebaseAuth')
+
+router.post('/seller', auth.checkAuthWithFirebase, sellerRoutes.seller);
+router.get('/', auth.checkAuthWithFirebase, sellerRoutes.displaySellerInfo);
+router.put('/update', auth.checkAuthWithFirebase, sellerRoutes.updateSellerInfo);
 
 module.exports = router;
