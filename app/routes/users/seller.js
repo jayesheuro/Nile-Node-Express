@@ -5,6 +5,8 @@ const sellerRoutes = require('../../controllers/users/seller');
 
 router.post('/seller', sellerRoutes.seller);
 router.get('/', sellerRoutes.displaySellerInfo);
-router.put('/update', sellerRoutes.updateSellerInfo);
+
+// This code will be fixed soon.......
+// router.put('/update', sellerRoutes.updateSellerInfo);
 
 module.exports = router;
