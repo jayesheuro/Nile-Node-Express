@@ -6,8 +6,8 @@ const ProductSchema = require('../../models/Product')
 
 const availableCollections = ["electronics", "mens_fashions", "womens_fashions", "kids_fashions", "toys_and_games", "appliances", "sports", "other"]
 
-async function saveProductToFirebase(product, inventory_id){
-    
+async function saveProductToFirebase(product, inventory_id) {
+    try {
         console.log(product.product_id.toString(), inventory_id)
 
         const db = firebase.firestore();
@@ -16,19 +16,21 @@ async function saveProductToFirebase(product, inventory_id){
         let prev_products = []
         let id = ''
 
-        snapshot2.forEach((doc)=>{
-            prev_products = doc.data().products 
+        snapshot2.forEach((doc) => {
+            prev_products = doc.data().products
             id = doc.id
             // if(inv_data.length>0){
             //     Userorders.push(inv_data[0])
             // }
         })
-        
-        prev_products.push(product)
-        console.log(prev_products)
-        Inventory.doc(id).update({products : prev_products})
-}
 
+        prev_products.push(product)
+        Inventory.doc(id).update({ products: prev_products })
+        return true
+    } catch (err) {
+        return err
+    }
+}
 
 function getCollection(collection_name) {
     collection_name = collection_name.toLowerCase()
@@ -105,25 +107,40 @@ const createProduct = async (req, res) => {
 
     let product_id = new mongoose.Types.ObjectId
     const product = new ProductInstance({
-        product_id: product_id ,
+        product_id: product_id,
         name: req.body.product_name,
         images: req.body.product_images,
         price: req.body.product_price,
         category: req.body.product_category,
         tags: req.body.product_tags,
-        rating_id: req.body.product_rating_id,
+        rating_id: req.body.product_rating_id, //should be taken from firebase after document creation
         technical_details: req.body.technical_details,
-        available_quantity : req.body.available_quantity
+        available_quantity: req.body.available_quantity,
+        highlights: req.body.highlights,
+        brand: req.body.brand,
+        buying_options: {
+            color: req.body.buying_options.color,
+            size: req.body.buying_options.size
+        }
     })
 
+    let saved_product = {}
     await product.save()
         .then(doc => {
-            return res.send(doc)
+            saved_product=doc
         }).catch(err => {
             return res.send(err)
         })
+    
+    let flag = await saveProductToFirebase({ product_id: product_id.toString(), category: req.body.product_category, available_quantity: req.body.available_quantity }, req.body.inventory_id)
 
-    await saveProductToFirebase({product_id: product_id.toString(), category:req.body.product_category, available_quantity : req.body.available_quantity}, req.body.inventory_id )
+    if(flag===true){
+        return res.send(saved_product)
+    }else{
+        return res.send({
+            message:flag
+        })
+    }
 
 }
 
