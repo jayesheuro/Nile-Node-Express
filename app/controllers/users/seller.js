@@ -7,6 +7,7 @@ const addNewSeller = async (req, res) => {
     const user = firebase.auth().currentUser;
     const email = user.email;
     const uid = user.uid;
+    
     let inv_id = uuidv4();
     req.body.contact['email'] = email;
     req.body['sellerId'] = uid;
@@ -20,10 +21,6 @@ const addNewSeller = async (req, res) => {
     res.status(200).json({
         status: "Seller information added successfully"
     })
-}
-
-const addProduct = async (req, res) => {
-    const id = req.body.product_id
 }
 
 const displaySellerInfo = async (req, res) => {

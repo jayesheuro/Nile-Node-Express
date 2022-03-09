@@ -20,6 +20,7 @@ const cancelOrder = (req,res)=>{
     // will be set by the user
     // update order status 
     // allowed status = ["Returned","Canceled"]
+    // refund -- out of scope --
 }
 
 const updateShippingAddress = (req,res)=>{
