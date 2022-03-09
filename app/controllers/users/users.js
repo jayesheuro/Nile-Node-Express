@@ -54,7 +54,7 @@ module.exports.getUsersInfo = async (req, res) => {
     snapshot.forEach(doc => {
         data.push({ Address: doc.data().Address, userId: doc.data().userId, Contact: doc.data().Contact })
         userId = doc.data().userId
-
+        // console.log(data[0].Contact.username)
         res.status(200).json({
             status: data
         })
