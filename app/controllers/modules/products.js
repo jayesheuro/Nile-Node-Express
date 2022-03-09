@@ -127,18 +127,18 @@ const createProduct = async (req, res) => {
     let saved_product = {}
     await product.save()
         .then(doc => {
-            saved_product=doc
+            saved_product = doc
         }).catch(err => {
             return res.send(err)
         })
-    
+
     let flag = await saveProductToFirebase({ product_id: product_id.toString(), category: req.body.product_category, available_quantity: req.body.available_quantity }, req.body.inventory_id)
 
-    if(flag===true){
+    if (flag === true) {
         return res.send(saved_product)
-    }else{
+    } else {
         return res.send({
-            message:flag
+            message: flag
         })
     }
 
@@ -378,7 +378,7 @@ const universalProductSearch = async (req, res) => {
     for (let i = 0; i < availableCollections.length; i++) {
         const collectionRef = mongoose.model(availableCollections[i], ProductSchema)
 
-        await collectionRef.find({ "messDetails.messName": { $regex: queryString, $options: '$i' } })
+        await collectionRef.find({ "name": { $regex: queryString, $options: '$i' } })
             .select("-__v")
             .then(docs => {
                 if (docs.length > 0) {

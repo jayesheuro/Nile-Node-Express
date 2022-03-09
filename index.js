@@ -28,8 +28,11 @@ const ProductsRoutes = require('./app/routes/modules/products');
 const CartRoutes = require('./app/routes/modules/productcart');
 const WatchlistRoutes = require('./app/routes/modules/watchlist');
 const Payment_methodRoutes = require('./app/routes/modules/payment_method');
-const TransactionHistoryRoutes = require('./app/routes/modules/transaction_history');
+const MyTransactionRoutes = require('./app/routes/modules/transaction_history');
 const CustomerOrdersRoutes = require('./app/routes/modules/customer_orders');
+const OrderRoutes = require('./app/routes/modules/order')
+const TransactionRecordRoutes = require('./app/routes/modules/transactionRecord')
+const RatingRoute = require('./app/routes/modules/rating')
 
 app.use('/api/login', loginRoute);
 app.use('/api/register', registerRoute);
@@ -39,8 +42,11 @@ app.use('/api/products', ProductsRoutes)
 app.use('/api/cart', CartRoutes)
 app.use('/api/watchlist', WatchlistRoutes)
 app.use('/api/payment', Payment_methodRoutes)
-app.use('/api/transaction', TransactionHistoryRoutes)
+app.use('/api/mytransactions', MyTransactionRoutes)
 app.use('/api/orders', CustomerOrdersRoutes)
+app.use('/api/transaction',TransactionRecordRoutes)
+app.use('/api/order',OrderRoutes)
+app.use('/api/rating',RatingRoute)
 
 // handling 404
 app.get('/',(req,res)=>{
