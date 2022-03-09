@@ -6,7 +6,7 @@ const Customerlogin = (req, res) => {
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
     .then((userCredential) => {
       res.status(200).json({
-        status: req.body.email
+        userid: userCredential.user.uid
       })
     })
     .catch((error) => {

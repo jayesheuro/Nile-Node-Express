@@ -2,6 +2,8 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 const { v4: uuidv4 } = require("uuid");
 
+// Note : displayCustomerOrders ,  updateCustomerOrders and deleteCustomerOrders contains bugs
+
 const displayCustomerOrders = async (req, res) => {
   // const user = firebase.auth().currentUser;
   // const uid = user.uid;
@@ -93,6 +95,7 @@ const deleteCustomerOrders = async (req, res) => {
   });
 };
 
+
 const addCustomerOrders = async (req, res) => {
   // const user = firebase.auth().currentUser;
   // const uid = user.uid;
@@ -147,14 +150,14 @@ const addCustomerOrders = async (req, res) => {
 
         buyer: {
           userId: doc.data().userId,
-          name: doc.data().Personal_details.username,
+          name: doc.data().Contact.username,
         },
 
         details: {
           time:
             today.getDate() +
             "/" +
-            today.getMonth() +
+            (today.getMonth()+1) +
             "/" +
             today.getFullYear() +
             ", " +
@@ -168,18 +171,18 @@ const addCustomerOrders = async (req, res) => {
             today.getDate() +
             6 +
             "/" +
-            today.getMonth() +
+            (today.getMonth()+1) +
             "/" +
             today.getFullYear() +
             ", " +
             today.toLocaleTimeString(),
           address: {
-            address_line_1: doc.data().Personal_details.address_line_1,
-            city: doc.data().Personal_details.city,
-            locality: doc.data().Personal_details.locality,
+            address_line_1: doc.data().Address[0].address_line_1,
+            city: doc.data().Address[0].city,
+            locality: doc.data().Address[0].locality,
             contact: {
-              email: doc.data().Personal_details.email,
-              mobile: doc.data().Personal_details.mobile,
+              email: doc.data().Contact.email,
+              mobile: doc.data().Contact.mobile,
             },
           },
         },
@@ -193,9 +196,9 @@ const addCustomerOrders = async (req, res) => {
     }
   });
 
-  // console.log(orders)
+  console.log(orders)
   Userorders.push(orders);
-  // await Users.doc(id).update({ orders: user_orders });
+  await Users.doc(id).update({ orders: user_orders });
 
   console.log(Userorders)
   await Inventory.doc(id2).update({ Userorders });

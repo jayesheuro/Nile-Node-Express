@@ -1,7 +1,7 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-const userTansaction = async (req, res) => {
+const addPaymentMode = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
@@ -47,7 +47,7 @@ const userTansaction = async (req, res) => {
     });
 }
 
-const displayUserTansaction = async (req, res) => {
+const displayPaymentModes= async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
@@ -69,7 +69,7 @@ const displayUserTansaction = async (req, res) => {
     });
 }
 
-const updateUserTansaction = async (req, res) => {
+const updatePaymentMode = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
@@ -107,7 +107,7 @@ const updateUserTansaction = async (req, res) => {
     })
 }
 
-const deleteUserTansaction = async (req, res) => {
+const deletePaymentMode = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
@@ -136,8 +136,8 @@ const deleteUserTansaction = async (req, res) => {
 }
 
 module.exports = {
-    userTansaction,
-    displayUserTansaction,
-    updateUserTansaction,
-    deleteUserTansaction
+    addPaymentMode,
+    displayPaymentModes,
+    updatePaymentMode,
+    deletePaymentMode
 }
