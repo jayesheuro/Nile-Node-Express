@@ -6,10 +6,11 @@ const { v4: uuidv4 } = require("uuid");
 const addNewSeller = async (req, res) => {
     const user = firebase.auth().currentUser;
     const email = user.email;
-    const uid = user.uid;
+    const uid = req.body.userid;
     
     let inv_id = uuidv4();
-    req.body.contact['email'] = email;
+    let emailId = { email : {email : email} }
+    req.body.business.contact.push( emailId )
     req.body['sellerId'] = uid;
     req.body["inventory_id"] = inv_id
     const db = firebase.firestore();
