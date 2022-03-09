@@ -3,7 +3,7 @@ const firebase = require("firebase");
 const Seller = require("../../../configs");
 const { v4: uuidv4 } = require('uuid');
 
-module.exports.seller = async (req, res) => {
+const addNewSeller = async (req, res) => {
     const user = firebase.auth().currentUser;
     const email = user.email;
     const uid = user.uid;
@@ -22,13 +22,11 @@ module.exports.seller = async (req, res) => {
     })
 }
 
-
-module.exports.addProduct = async (req, res) => {
+const addProduct = async (req, res) => {
     const id = req.body.product_id
 }
 
-
-module.exports.displaySellerInfo = async (req, res) => {
+const displaySellerInfo = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -47,11 +45,7 @@ module.exports.displaySellerInfo = async (req, res) => {
     });
 }
 
-
-
-
-
-module.exports.updateSellerInfo = async (req, res) => {
+const updateSellerInfo = async (req, res) => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     const db = firebase.firestore();
@@ -79,4 +73,10 @@ module.exports.updateSellerInfo = async (req, res) => {
             status: "Seller information updated"
         })
     });
+}
+
+module.exports={
+    addNewSeller,
+    displaySellerInfo,
+    updateSellerInfo
 }

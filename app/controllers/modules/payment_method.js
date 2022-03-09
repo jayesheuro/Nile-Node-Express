@@ -2,8 +2,10 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 
 const userTansaction = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+
     const db = firebase.firestore();
     const Users = db.collection("Users");
     let Payment_method = []
@@ -46,8 +48,10 @@ const userTansaction = async (req, res) => {
 }
 
 const displayUserTansaction = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -66,8 +70,10 @@ const displayUserTansaction = async (req, res) => {
 }
 
 const updateUserTansaction = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
@@ -102,8 +108,10 @@ const updateUserTansaction = async (req, res) => {
 }
 
 const deleteUserTansaction = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();

@@ -3,8 +3,10 @@ const firebase = require("firebase");
 const { v4: uuidv4 } = require("uuid");
 
 const displayCustomerOrders = async (req, res) => {
-  const user = firebase.auth().currentUser;
-  const uid = user.uid;
+  // const user = firebase.auth().currentUser;
+  // const uid = user.uid;
+  const uid = req.body.userid
+  
   const db = firebase.firestore();
   const Users = db.collection("Users");
 
@@ -21,8 +23,10 @@ const displayCustomerOrders = async (req, res) => {
 };
 
 const updateCustomerOrders = async (req, res) => {
-  const user = firebase.auth().currentUser;
-  const uid = user.uid;
+  // const user = firebase.auth().currentUser;
+  // const uid = user.uid;
+  const uid = req.body.userid
+
   const db = firebase.firestore();
   const Users = db.collection("Users");
   const snapshot = await Users.where("userId", "==", uid).get();
@@ -55,8 +59,10 @@ const updateCustomerOrders = async (req, res) => {
 };
 
 const deleteCustomerOrders = async (req, res) => {
-  const user = firebase.auth().currentUser;
-  const uid = user.uid;
+  // const user = firebase.auth().currentUser;
+  // const uid = user.uid;
+  const uid = req.body.userid
+
   const db = firebase.firestore();
   const Users = db.collection("Users");
   const snapshot = await Users.where("userId", "==", uid).get();
@@ -88,9 +94,12 @@ const deleteCustomerOrders = async (req, res) => {
 };
 
 const addCustomerOrders = async (req, res) => {
-  const user = firebase.auth().currentUser;
-  Userorders = [];
+  // const user = firebase.auth().currentUser;
+  // const uid = user.uid;
+  // const uid = req.body.userid
   const uid = "OxQdsSxiBygKhHuOVNUVuMziWuf2";
+
+  Userorders = [];
   const db = firebase.firestore();
   const Users = db.collection("Users");
   const Sellers = db.collection("Sellers");
