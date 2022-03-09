@@ -9,9 +9,23 @@ const addTransactionRecord = async (req, res) => {
   const uid = req.body.userid;
   const db = firebase.firestore();
   const Transactions = db.collection("Transactions");
+  var today = new Date();
 
+  let transactions = {
+    transaction_id : uuidv4(),
+    transaction_date :today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear(),
+    transaction_time : today.toLocaleTimeString(),
+    amount : req.body.amount,
+    payment_mode: req.body.payment_mode,
+    components:{
+      cart_total: req.body.component.cart_total,
+      delivery_charge: req.body.component.delivery_charge,
+      coupon_discount: req.body.component.coupon_discount
+    }
+  }
+  let userid = uid
   Transactions.add({
-    Transaction_id: uuidv4(),
+    transactions, userid
   })
     .then((docRef) => {
       res.status(200).json({
@@ -26,28 +40,22 @@ const addTransactionRecord = async (req, res) => {
 };
 
 const getTransactionRecordById = async (req, res) => {
-  // req.params.transaction_id
-  // send transaction document
+
   transaction_id = req.params.id
   const userid = req.body.userid
   const db = firebase.firestore();
-  const Inventory = db.collection("Inventory");
-  let orderByTransactionId = {}
-  const snapshot = await Inventory.where("userId", "==", userid).get();
+  const Transactions = db.collection("Transactions");
+  let TransactionByTransactionId = {}
+  const snapshot = await Transactions.where("transactions.transaction_id", "==", transaction_id).get();
   snapshot.forEach((doc) => {
     if (doc.data()) {
-        doc.data().Userorders.forEach((order)=>{
-          console.log(doc.data().Userorders)
-            if (order.details.transaction_id == transaction_id){
-              orderByTransactionId = order 
-            }
-        })
+      TransactionByTransactionId = doc.data()
     }
 
   })
   
   res.status(200).json({
-    OrderDetail : orderByTransactionId
+    TransactionByTransactionId
   });
 };
 
@@ -57,15 +65,12 @@ const getTransactionRecordFromList = async(req, res) => {
   // }
   const userid = req.body.userid
   const db = firebase.firestore();
-  const Inventory = db.collection("Inventory");
+  const Transactions = db.collection("Transactions");
   let transactions= []
-  console.log("hello")
-  const snapshot = await Inventory.where("userId", "==", userid).get();
+  const snapshot = await Transactions.where("userid", "==", userid).get();
   snapshot.forEach((doc) => {
     if (doc.data()) {
-        doc.data().Userorders.forEach((transaction)=>{
-          transactions.push(transaction.details.transaction_id)
-        })
+          transactions.push(doc.data().userid)
     }
   })
   

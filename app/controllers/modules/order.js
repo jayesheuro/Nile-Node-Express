@@ -30,7 +30,9 @@ const placeOrder = async (req, res) => {
     inv_data = doc.data().Userorders;
     id2 = doc.id;
     if (inv_data.length > 0) {
-      Userorders.push(inv_data[0]);
+      doc.data().Userorders.forEach((it) => {
+        Userorders.push(it);
+      });
     }
   });
 
@@ -45,6 +47,11 @@ const placeOrder = async (req, res) => {
   const snapshot = await Users.where("userId", "==", uid).get();
   snapshot.forEach((doc) => {
     if (doc.data()) {
+      if (doc.data().orders.length > 0) {
+        doc.data().orders.forEach((it) => {
+          user_orders.push(it);
+        });
+      }
       users_data = doc.data();
       id = doc.id;
       let tracking_id = uuidv4();
@@ -71,6 +78,7 @@ const placeOrder = async (req, res) => {
             today.toLocaleTimeString(),
           isCOD: true,
           transaction_id: transaction_id,
+          status: "ordered",
         },
 
         delivery: {
@@ -83,22 +91,13 @@ const placeOrder = async (req, res) => {
             today.getFullYear() +
             ", " +
             today.toLocaleTimeString(),
-          address: {
-            address_line_1: doc.data().Address[0].address_line_1,
-            city: doc.data().Address[0].city,
-            locality: doc.data().Address[0].locality,
-            contact: {
-              email: doc.data().Contact.email,
-              mobile: doc.data().Contact.mobile,
-            },
-          },
+          address: req.body.address,
         },
       };
 
       user_orders.push({
         tracking_id: tracking_id,
         transaction_id: transaction_id,
-        status: "ordered",
       });
     }
   });
@@ -109,7 +108,7 @@ const placeOrder = async (req, res) => {
   await Inventory.doc(id2).update({ Userorders });
 
   res.status(200).json({
-    status: "success",
+    status: "Success",
   });
 };
 
@@ -146,17 +145,30 @@ const updateOrderStatus = async (req, res) => {
   const userid = req.body.userid;
   const db = firebase.firestore();
   const Inventory = db.collection("Inventory");
-  let orderByTrackingId = {};
+  let Userorders = [];
+  let id = "";
   const snapshot = await Inventory.where("userId", "==", userid).get();
   snapshot.forEach((doc) => {
     if (doc.data()) {
-      doc.data().Userorders.forEach((order) => {
-        if (order.tracking_id == tracking_id) {
-          // orderByTrackingId = order
-          console.log(order.tracking_id);
-        }
-      });
+      id = doc.id;
+      if (doc.data().Userorders.length > 0) {
+        doc.data().Userorders.forEach((it) => {
+          Userorders.push(it);
+        });
+      }
     }
+  });
+
+  Userorders.forEach((order) => {
+    if (order.tracking_id == tracking_id) {
+      order.details.status = req.body.status;
+    }
+  });
+
+  Inventory.doc(id).update({ Userorders });
+
+  res.status(200).json({
+    status: "Success",
   });
 };
 
@@ -167,9 +179,40 @@ const cancelOrder = (req, res) => {
   // refund -- out of scope --
 };
 
-const updateShippingAddress = (req, res) => {
+const updateShippingAddress = async (req, res) => {
   // req.body.shippingAddress = {}
   // send success
+  let tracking_id = req.body.tracking_id;
+  const userid = req.body.userid;
+  const db = firebase.firestore();
+  const Inventory = db.collection("Inventory");
+  let Userorders = [];
+  let id = "";
+  const snapshot = await Inventory.where("userId", "==", userid).get();
+  snapshot.forEach((doc) => {
+    if (doc.data()) {
+      id = doc.id;
+      if (doc.data().Userorders.length > 0) {
+        doc.data().Userorders.forEach((it) => {
+          Userorders.push(it);
+        });
+      }
+    }
+  });
+
+  Userorders.forEach((order) => {
+    if (order.tracking_id == tracking_id) {
+      order.delivery.address.shipping_address = req.body.shipping_address
+
+    }
+  });
+
+  // console.log(Userorders)
+  Inventory.doc(id).update({ Userorders });
+
+  res.status(200).json({
+    status: "Success",
+  });
 };
 
 module.exports = {

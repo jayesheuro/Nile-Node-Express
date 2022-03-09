@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 const auth = require('../../services/auth/firebaseAuth')
 
 router.post('/add', auth.checkAuthWithFirebase, UsersRoutes.addNewUser);
-router.get('/', auth.checkAuthWithFirebase ,UsersRoutes.getUserInfoById);
+router.post('/', auth.checkAuthWithFirebase ,UsersRoutes.getUserInfoById);
 router.put('/update/:ind', auth.checkAuthWithFirebase, UsersRoutes.updateUserInfoById);
 router.delete('/delete/:ind', auth.checkAuthWithFirebase, UsersRoutes.deleteUserInfoById);
 

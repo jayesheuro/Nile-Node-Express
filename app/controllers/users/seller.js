@@ -37,19 +37,17 @@ const displaySellerInfo = async (req, res) => {
   // const uid = user.uid;
   const uid  = req.body.userid 
   const db = firebase.firestore();
-  const Users = db.collection("Sellers");
-  const data = [];
-  const snapshot = await Users.where("sellerId", "==", uid).get();
+  const Sellers = db.collection("Sellers");
+  let business = {}
+  const snapshot = await Sellers.where("sellerId", "==", uid).get();
   snapshot.forEach((doc) => {
-    data.push({
-      business: doc.data().business,
-    });
-    console.log(data[0]);
+    business = doc.data().business
   });
+  
   res.status(200).json({
-    status: data[0]
-  });
-};
+   business: business
+  })
+}
 
 
 module.exports={
