@@ -2,8 +2,10 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 
 const addPaymentMode = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+
     const db = firebase.firestore();
     const Users = db.collection("Users");
     let Payment_method = []
@@ -45,9 +47,11 @@ const addPaymentMode = async (req, res) => {
     });
 }
 
-const displayPaymentModes = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+const displayPaymentModes= async (req, res) => {
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -66,8 +70,10 @@ const displayPaymentModes = async (req, res) => {
 }
 
 const updatePaymentMode = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
@@ -102,8 +108,10 @@ const updatePaymentMode = async (req, res) => {
 }
 
 const deletePaymentMode = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();

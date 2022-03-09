@@ -5,7 +5,7 @@ const sellerRoutes = require('../../controllers/users/seller');
 
 const auth = require('../../services/auth/firebaseAuth')
 
-router.post('/seller', auth.checkAuthWithFirebase, sellerRoutes.newSeller);
+router.post('/seller', auth.checkAuthWithFirebase, sellerRoutes.addNewSeller);
 router.get('/', auth.checkAuthWithFirebase, sellerRoutes.displaySellerInfo);
 // router.put('/update', auth.checkAuthWithFirebase, sellerRoutes.updateSellerInfo);
 

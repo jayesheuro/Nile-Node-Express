@@ -2,8 +2,10 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 
 const userCarts = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -47,8 +49,10 @@ const userCarts = async (req, res) => {
 }
 
 const displayUserCarts = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -65,8 +69,10 @@ const displayUserCarts = async (req, res) => {
 }
 
 const updateUserCarts = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
@@ -104,8 +110,10 @@ const updateUserCarts = async (req, res) => {
 }
 
 const deleteUserCarts = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
