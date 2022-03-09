@@ -1,7 +1,7 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-module.exports.Users = async (req, res) => {
+const addNewUser = async (req, res) => {
     const user = firebase.auth().currentUser;
     const email = user.email;
     const uid = user.uid;
@@ -42,9 +42,11 @@ module.exports.Users = async (req, res) => {
     })
 }
 
-module.exports.getUsersInfo = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+const getUserInfoById = async (req, res) => {
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -61,9 +63,11 @@ module.exports.getUsersInfo = async (req, res) => {
     });
 }
 
-module.exports.updateUsersInfo = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+const updateUserInfoById = async (req, res) => {
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const ind = req.params.ind
     const db = firebase.firestore();
     const Users = db.collection("Users");
@@ -90,10 +94,12 @@ module.exports.updateUsersInfo = async (req, res) => {
 
 }
 
-module.exports.deleteUsersInfo = async (req, res) => {
-    const user = firebase.auth().currentUser;
+const deleteUserInfoById = async (req, res) => {
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     let Address = []
-    const uid = user.uid;
     let id = ''
     const ind = req.params.ind
     const db = firebase.firestore();
@@ -110,4 +116,11 @@ module.exports.deleteUsersInfo = async (req, res) => {
     res.status(200).json({
         status: "User deleted successfully"
     })
+}
+
+module.exports = {
+    addNewUser,
+    getUserInfoById,
+    updateUserInfoById,
+    deleteUserInfoById
 }

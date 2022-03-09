@@ -378,7 +378,7 @@ const universalProductSearch = async (req, res) => {
     for (let i = 0; i < availableCollections.length; i++) {
         const collectionRef = mongoose.model(availableCollections[i], ProductSchema)
 
-        await collectionRef.find({ "messDetails.messName": { $regex: queryString, $options: '$i' } })
+        await collectionRef.find({ "name": { $regex: queryString, $options: '$i' } })
             .select("-__v")
             .then(docs => {
                 if (docs.length > 0) {

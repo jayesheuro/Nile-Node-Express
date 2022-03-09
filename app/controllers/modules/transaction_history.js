@@ -2,8 +2,10 @@ const Users = require("../../../configs");
 const firebase = require("firebase");
 
 const addTransactionHistory = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -11,13 +13,13 @@ const addTransactionHistory = async (req, res) => {
     snapshot.forEach(doc => {
         if (doc.data()) {
 
-            const users_data = doc.data()
+            let transaction_history = doc.data().transaction_history
             const id = doc.id;
 
-            users_data['transaction_history'].push(req.body.transaction_history)
+            transaction_history.push(String(req.body.transaction_id))
 
             Users.doc(id).update(
-                users_data
+                {transaction_history:transaction_history}
             )
             res.status(200).json({
                 status: "Success"
@@ -27,8 +29,10 @@ const addTransactionHistory = async (req, res) => {
 }
 
 const displayTansactionHistory = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -45,8 +49,10 @@ const displayTansactionHistory = async (req, res) => {
 }
 
 const updateTansactionHistory = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
@@ -84,8 +90,10 @@ const updateTansactionHistory = async (req, res) => {
 }
 
 const deleteTansactionHistory = async (req, res) => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid;
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+    
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
