@@ -99,8 +99,8 @@ const deleteCustomerOrders = async (req, res) => {
 const addCustomerOrders = async (req, res) => {
   // const user = firebase.auth().currentUser;
   // const uid = user.uid;
-  // const uid = req.body.userid
-  const uid = "OxQdsSxiBygKhHuOVNUVuMziWuf2";
+  const uid = req.body.userid
+  // const uid = "OxQdsSxiBygKhHuOVNUVuMziWuf2";
 
   Userorders = [];
   const db = firebase.firestore();
@@ -141,7 +141,7 @@ const addCustomerOrders = async (req, res) => {
       users_data = doc.data();
       id = doc.id;
       let tracking_id = uuidv4();
-      let transaction_id = uuidv4();
+      let transaction_id = req.body.transaction_id;
 
       orders = {
         inventory_id: inv_id,

@@ -19,6 +19,7 @@ const addNewSeller = async (req, res) => {
   await Sellers.add(req.body);
   await Inventory.add({
     inventory_id: inv_id,
+    user_id : uid,
     Userorders: [],
     products: [],
     new_orders: [],

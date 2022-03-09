@@ -1,10 +1,12 @@
 const express = require('express')
+const auth = require('../../services/auth/firebaseAuth')
+
 const router = express.Router()
 
 const transactionRecordController = require('../../controllers/modules/transactionRecord')
-
-router.get("/:id",transactionRecordController.getTransactionRecordById)
+// auth.checkAuthWithFirebase, 
 router.get("/list",transactionRecordController.getTransactionRecordFromList)
-router.post("/",transactionRecordController.addTransactionRecord)
+router.get("/:id", transactionRecordController.getTransactionRecordById)
+router.post("/", transactionRecordController.addTransactionRecord)
 
 module.exports = router

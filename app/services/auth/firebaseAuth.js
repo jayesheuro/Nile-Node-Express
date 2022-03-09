@@ -11,11 +11,11 @@ const checkAuthWithFirebase = async (req, res, next) => {
     snapshot.forEach((doc) => {
       if (doc.data()) {
         next();
-      } 
+      }
     });
     res.status(401).send({
-        message: "Login required",
-      });
+      message: "Login required",
+    });
   } else {
     res.status(401).send({
       message: "Login required",
