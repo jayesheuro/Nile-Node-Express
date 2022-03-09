@@ -382,11 +382,13 @@ const universalProductSearch = async (req, res) => {
             .select("-__v")
             .then(docs => {
                 if (docs.length > 0) {
-                    let dataObj = {
-                        "category": availableCollections[i],
-                        "data": docs
-                    }
-                    foundData.push(dataObj)
+                    // let dataObj = {
+                    //     "category": availableCollections[i],
+                    //     "data": docs
+                    // }
+                    docs.map((doc,index)=>{
+                        foundData.push(doc)
+                    })
                 }
             }).catch(err => {
                 return res.send(err)
