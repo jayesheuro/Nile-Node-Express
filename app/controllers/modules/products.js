@@ -117,7 +117,6 @@ const getProductFromList = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  console.log(req.body);
   let collection_name = getCollection(req.body.product_category);
   const ProductInstance = mongoose.model(collection_name, ProductSchema);
 
@@ -439,11 +438,13 @@ const universalProductSearch = async (req, res) => {
       .select("-__v")
       .then((docs) => {
         if (docs.length > 0) {
-          let dataObj = {
-            category: availableCollections[i],
-            data: docs,
-          };
-          foundData.push(dataObj);
+          // let dataObj = {
+          //     "category": availableCollections[i],
+          //     "data": docs
+          // }
+          docs.map((doc, index) => {
+            foundData.push(doc);
+          });
         }
       })
       .catch((err) => {

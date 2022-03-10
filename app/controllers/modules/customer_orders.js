@@ -95,7 +95,7 @@ const deleteCustomerOrders = async (req, res) => {
   });
 };
 
-
+ 
 const addCustomerOrders = async (req, res) => {
   // const user = firebase.auth().currentUser;
   // const uid = user.uid;
@@ -208,6 +208,9 @@ const addCustomerOrders = async (req, res) => {
     orders: orders,
   });
 };
+
+
+
 
 module.exports = {
   displayCustomerOrders,

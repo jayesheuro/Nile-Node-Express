@@ -60,8 +60,7 @@ const displayPaymentModes= async (req, res) => {
     const snapshot = await Users.where('userId', '==', uid).get();
 
     snapshot.forEach(doc => {
-        console.log("here")
-        data.push({ Transactions: doc.data().Payment_method })
+        data.push({ payment_methods: doc.data().Payment_method })
 
         res.status(200).json({
             status: data[0]
