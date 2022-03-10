@@ -12,6 +12,7 @@ module.exports.CustomerRegister = async (req, res) => {
         userId: userCredential.user.uid,
         isSeller :false,
         Address: [],
+        orders :[],
         cart:{
           total_products:0,
           product_selected:[],

@@ -115,23 +115,6 @@ const getProductFromList = async (req, res) => {
     products: data_arr,
   });
 };
-// let saved_product = {}
-// await product.save()
-//     .then(doc => {
-//         saved_product = doc
-//     }).catch(err => {
-//         return res.send(err)
-//     })
-
-// let flag = await saveProductToFirebase({ product_id: product_id.toString(), category: req.body.product_category, available_quantity: req.body.available_quantity }, req.body.inventory_id)
-
-// if (flag === true) {
-//     return res.send(saved_product)
-// } else {
-//     return res.send({
-//         message: flag
-//     })
-// }
 
 const createProduct = async (req, res) => {
   let collection_name = getCollection(req.body.product_category);
@@ -145,7 +128,7 @@ const createProduct = async (req, res) => {
     price: req.body.product_price,
     category: req.body.product_category,
     tags: req.body.product_tags,
-    rating_id: req.body.product_rating_id, //should be taken from firebase after document creation
+    rating_id: "", //should be taken from firebase after document creation
     technical_details: req.body.technical_details,
     available_quantity: req.body.available_quantity,
     highlights: req.body.highlights,
@@ -216,7 +199,13 @@ const updateProduct = async (req, res) => {
     // updating on the required fileds
     let keys = Object.keys(req.body);
     let values = Object.values(req.body);
-    let allowedFields = ["images", "price", "tags", "technical_details"];
+    let allowedFields = [
+      "images",
+      "price",
+      "tags",
+      "technical_details",
+      "rating_id",
+    ];
 
     for (let i = 0; i < keys.length; i++) {
       if (allowedFields.includes(keys[i]) === true) {
@@ -230,7 +219,10 @@ const updateProduct = async (req, res) => {
         {
           product_id: mongoose.Types.ObjectId(product_id),
         },
-        required_doc
+        required_doc,
+        {
+          new: true,
+        }
       )
       .then((doc) => {
         if (doc !== null) {
