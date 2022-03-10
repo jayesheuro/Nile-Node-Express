@@ -4,7 +4,7 @@ const firebase = require("firebase");
 const addNewUser = async (req, res) => {
     const user = firebase.auth().currentUser;
     const email = user.email;
-    const uid = user.uid;
+    const uid = req.body.userid
 
     Address = []
     Contact = []
@@ -15,7 +15,6 @@ const addNewUser = async (req, res) => {
     snapshot.forEach((doc) => {
         if (doc.data()) {
             id = doc.id
-            console.log(doc.data().Address.length)
             if (doc.data().Address.length > 0) {
                 doc.data().Address.map(it => {
                     Address.push(it)
@@ -23,7 +22,6 @@ const addNewUser = async (req, res) => {
                 })
             }
 
-            console.log()
             if (Object.keys(doc.data().Contact).length < 1) {
                 req.body.Contact['email'] = email;
                 Contact.push(req.body.Contact)
@@ -54,7 +52,7 @@ const getUserInfoById = async (req, res) => {
     let userId
     const snapshot = await Users.where('userId', '==', uid).get();
     snapshot.forEach(doc => {
-        data.push({ Address: doc.data().Address, userId: doc.data().userId, Contact: doc.data().Contact })
+        data.push({ Address: doc.data().Address, userId: doc.data().userId, Contact: doc.data().Contact, isSeller : doc.data().isSeller })
         userId = doc.data().userId
         // console.log(data[0].Contact.username)
         res.status(200).json({

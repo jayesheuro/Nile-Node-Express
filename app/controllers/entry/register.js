@@ -10,16 +10,20 @@ module.exports.CustomerRegister = async (req, res) => {
     .then((userCredential) => {
       Users.add({
         userId: userCredential.user.uid,
+        isSeller :false,
         Address: [],
-        other_product_info: '',
-        product_selected: [],
+        cart:{
+          total_products:0,
+          product_selected:[],
+          total_amount:0 
+        },
         watch_list: [],
         Payment_method: [],
         transaction_history: [],
         Contact: {},
       });
       res.status(200).json({
-        status: "User registered successfully",
+        userid: userCredential.user.uid,
       });
     })
     .catch((error) => {

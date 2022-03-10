@@ -7,9 +7,9 @@ router.use(bodyParser.json());
 
 const auth = require('../../services/auth/firebaseAuth')
 
-router.post('/carts', auth.checkAuthWithFirebase, CartRoutes.userCarts);
-router.get('/', auth.checkAuthWithFirebase, CartRoutes.displayUserCarts);
-router.put('/update/:ind', auth.checkAuthWithFirebase, CartRoutes.updateUserCarts);
-router.delete('/delete/:product_id', auth.checkAuthWithFirebase, CartRoutes.deleteUserCarts);
+router.post('/new', auth.checkAuthWithFirebase, CartRoutes.addItemToCart);
+router.post('/get', CartRoutes.displayUserCarts);
+router.post('/update', auth.checkAuthWithFirebase, CartRoutes.updateProductQuantity);
+router.post('/delete', auth.checkAuthWithFirebase, CartRoutes.removeItemFromCart);
 
 module.exports = router;

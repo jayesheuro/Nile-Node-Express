@@ -5,6 +5,7 @@ const checkUser = require("./state");
 const Customerlogin = (req, res) => {
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
     .then((userCredential) => {
+      console.log(userCredential.user.uid)
       res.status(200).json({
         userid: userCredential.user.uid
       })

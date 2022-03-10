@@ -7,15 +7,16 @@ const checkAuthWithFirebase = async (req, res, next) => {
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where("userId", "==", uid).get();
-
+    
     snapshot.forEach((doc) => {
       if (doc.data()) {
         next();
-      } 
+      }
     });
-    res.status(401).send({
-        message: "Login required",
-      });
+
+    // res.status(401).send({
+    //   message: "Login required",
+    // });
   } else {
     res.status(401).send({
       message: "Login required",
