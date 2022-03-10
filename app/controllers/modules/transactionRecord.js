@@ -11,8 +11,10 @@ const addTransactionRecord = async (req, res) => {
   const Transactions = db.collection("Transactions");
   var today = new Date();
 
+  let t_id = uuidv4()
+
   let transactions = {
-    transaction_id : uuidv4(),
+    transaction_id : t_id,
     transaction_date :today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear(),
     transaction_time : today.toLocaleTimeString(),
     amount : req.body.amount,
@@ -29,10 +31,12 @@ const addTransactionRecord = async (req, res) => {
   })
     .then((docRef) => {
       res.status(200).json({
-        Status: "success"
+        Status: "success",
+        transaction_id:t_id
       });
     })
     .catch((error) => {
+      console.log(error)
       res.status(200).json({
         Status: "Something went wrong"
       });
