@@ -115,6 +115,23 @@ const getProductFromList = async (req, res) => {
     products: data_arr,
   });
 };
+// let saved_product = {}
+// await product.save()
+//     .then(doc => {
+//         saved_product = doc
+//     }).catch(err => {
+//         return res.send(err)
+//     })
+
+// let flag = await saveProductToFirebase({ product_id: product_id.toString(), category: req.body.product_category, available_quantity: req.body.available_quantity }, req.body.inventory_id)
+
+// if (flag === true) {
+//     return res.send(saved_product)
+// } else {
+//     return res.send({
+//         message: flag
+//     })
+// }
 
 const createProduct = async (req, res) => {
   let collection_name = getCollection(req.body.product_category);
@@ -429,11 +446,13 @@ const universalProductSearch = async (req, res) => {
       .select("-__v")
       .then((docs) => {
         if (docs.length > 0) {
-          let dataObj = {
-            category: availableCollections[i],
-            data: docs,
-          };
-          foundData.push(dataObj);
+          // let dataObj = {
+          //     "category": availableCollections[i],
+          //     "data": docs
+          // }
+          docs.map((doc, index) => {
+            foundData.push(doc);
+          });
         }
       })
       .catch((err) => {

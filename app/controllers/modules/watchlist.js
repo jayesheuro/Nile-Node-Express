@@ -61,7 +61,7 @@ const displayUserWatchlist = async (req, res) => {
 
         res.status(200).json({
             status: data[0]
-        })
+        }) 
     });
 }
 

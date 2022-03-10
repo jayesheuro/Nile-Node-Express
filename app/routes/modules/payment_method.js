@@ -7,8 +7,8 @@ router.use(bodyParser.json());
 
 const auth = require('../../services/auth/firebaseAuth')
 
-router.post('/', auth.checkAuthWithFirebase, TransactionRoutes.addPaymentMode);
-router.get('/', auth.checkAuthWithFirebase, TransactionRoutes.displayPaymentModes);
+router.post('/add', auth.checkAuthWithFirebase, TransactionRoutes.addPaymentMode);
+router.post('/', auth.checkAuthWithFirebase, TransactionRoutes.displayPaymentModes);
 router.put('/update/:payment_type', auth.checkAuthWithFirebase, TransactionRoutes.updatePaymentMode)
 router.delete('/delete/:payment_type', auth.checkAuthWithFirebase, TransactionRoutes.deletePaymentMode)
 

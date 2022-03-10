@@ -19,7 +19,7 @@ module.exports.CustomerRegister = async (req, res) => {
         Contact: {},
       });
       res.status(200).json({
-        status: "User registered successfully",
+        userid: userCredential.user.uid,
       });
     })
     .catch((error) => {
