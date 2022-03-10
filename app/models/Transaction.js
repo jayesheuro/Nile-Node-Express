@@ -10,3 +10,4 @@ const TransactionInterface = {
         coupon_discount:Number
     }
 }
+
