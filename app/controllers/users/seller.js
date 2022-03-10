@@ -16,6 +16,8 @@ const addNewSeller = async (req, res) => {
     const db = firebase.firestore();
     const Sellers = db.collection("Sellers");
     const Inventory = db.collection("Inventory");
+    const Users = db.collection("Users");
+    delete req.body.userid
 
   await Sellers.add(req.body);
   await Inventory.add({
@@ -28,6 +30,17 @@ const addNewSeller = async (req, res) => {
     delivered: [],
     returned: [],
   });
+  let isSeller = ''
+  let id = ''
+  const snapshot = await Users.where("userId", "==", uid).get();
+  snapshot.forEach((doc) => {
+    id = doc.id
+    if(doc.data().isSeller == false){
+      isSeller = true
+    }
+  })
+  console.log(isSeller)
+  Users.doc(id).update({ isSeller: isSeller });
   res.status(200).json({
     status: req.body
   });
