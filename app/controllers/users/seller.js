@@ -19,10 +19,10 @@ const addNewSeller = async (req, res) => {
     const Users = db.collection("Users");
     delete req.body.userid
 
-  await Sellers.add(req.body.business);
+  await Sellers.add(req.body);
   await Inventory.add({
     inventory_id: inv_id,
-    user_id : uid,
+    userId : uid,
     Userorders: [],
     products: [],
     new_orders: [],

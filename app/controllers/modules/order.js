@@ -217,22 +217,18 @@ const updateShippingAddress = async (req, res) => {
 
 
 const displayCustomerOrders = async (req, res) => {
-  // const user = firebase.auth().currentUser;
-  // const uid = user.uid;
   const uid = req.body.userid
-  
   const db = firebase.firestore();
   const Inventory = db.collection("Inventory");
-
   const data = [];
-
+  let inventory_id= ''
   const snapshot = await Inventory.where("userId", "==", uid).get();
   snapshot.forEach((doc) => {
     data.push({ orders: doc.data()});
+    inventory_id =  data[0].orders.inventory_id
   });
   res.status(200).json({
-    Orders : data[0].orders
-    // Orders : data[0].orders.inventory_id
+    inventory_id : inventory_id
   });
 };
 
