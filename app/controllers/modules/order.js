@@ -3,6 +3,7 @@ const firebase = require("firebase");
 const { v4: uuidv4 } = require("uuid");
 
 const placeOrder = async (req, res) => {
+  console.log(req.body)
   // generate tracking id
   // mention buyer id, seller id, transaction id
   // add document to the Order collection
@@ -60,7 +61,7 @@ const placeOrder = async (req, res) => {
       orders = {
         inventory_id: inv_id,
         tracking_id: tracking_id,
-        product_selected: doc.data().product_selected,
+        product_selected: doc.data().cart.product_selected,
 
         buyer: {
           userId: doc.data().userId,
@@ -76,7 +77,7 @@ const placeOrder = async (req, res) => {
             today.getFullYear() +
             ", " +
             today.toLocaleTimeString(),
-          isCOD: true,
+          payment_mode:req.body.payment_mode,
           transaction_id: transaction_id,
           status: "ordered",
         },
@@ -109,6 +110,7 @@ const placeOrder = async (req, res) => {
 
   res.status(200).json({
     status: "Success",
+    tracking_id:tracking_id
   });
 };
 
