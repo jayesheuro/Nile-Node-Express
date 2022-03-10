@@ -215,10 +215,32 @@ const updateShippingAddress = async (req, res) => {
   });
 };
 
+
+const displayCustomerOrders = async (req, res) => {
+  // const user = firebase.auth().currentUser;
+  // const uid = user.uid;
+  const uid = req.body.userid
+  
+  const db = firebase.firestore();
+  const Inventory = db.collection("Inventory");
+
+  const data = [];
+
+  const snapshot = await Inventory.where("userId", "==", uid).get();
+  snapshot.forEach((doc) => {
+    data.push({ orders: doc.data()});
+  });
+  res.status(200).json({
+    Orders : data[0].orders
+    // Orders : data[0].orders.inventory_id
+  });
+};
+
 module.exports = {
   placeOrder,
   updateOrderStatus,
   cancelOrder,
   updateShippingAddress,
   getOrderDetailsById,
+  displayCustomerOrders
 };
