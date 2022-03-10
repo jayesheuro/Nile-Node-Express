@@ -1,11 +1,11 @@
 const Users = require("../../../configs");
 const firebase = require("firebase");
 
-const userCarts = async (req, res) => {
+const addItemToCart = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
-    
+
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
@@ -13,36 +13,31 @@ const userCarts = async (req, res) => {
     snapshot.forEach(doc => {
         if (doc.data()) {
 
-            if (doc.data().product_selected.length >= 1) {
-                const users_data = doc.data()
-                const id = doc.id;
-                users_data.product_selected.push(req.body.product_selected[0])
-                users_data.other_product_info.total_products += 1
-                users_data.other_product_info.total_amount += req.body.product_selected[0].price
+            const users_data = doc.data()
+            const id = doc.id;
 
-                Users.doc(id).update(
-                    users_data
-                )
-                res.status(200).json({
-                    status: "Cart updated"
-                })
+            let cartObject = users_data.cart
+            let allProducts = cartObject.product_selected
 
+            let flag = 0
+            for (let i = 0; i < allProducts.length; i++) {
+                if (allProducts[i].product_id === req.body.product.product_id) {
+                    return res.status(200).send({
+                        status: "product already exists in the cart"
+                    })
+                }
             }
-            else {
-                const users_data = doc.data()
-                const id = doc.id;
 
-                users_data["product_selected"] = req.body.product_selected;
-                users_data["other_product_info"] = { total_amount: req.body.product_selected[0].price, total_products: 1 };
+            cartObject.product_selected.push(req.body.product)
+            cartObject.total_products += 1
+            cartObject.total_amount += req.body.product.quantity * req.body.product.price
 
-                Users.doc(id).update(
-                    users_data
-                )
-
-                res.status(200).json({
-                    status: "Product added in the cart"
-                })
-            }
+            Users.doc(id).update(
+                { cart: cartObject }
+            )
+            res.status(200).send({
+                status: "Cart updated"
+            })
         }
 
     });
@@ -52,107 +47,100 @@ const displayUserCarts = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
-    
+
     const db = firebase.firestore();
     const Users = db.collection("Users");
 
-    const data = []
-
     const snapshot = await Users.where('userId', '==', uid).get();
     snapshot.forEach(doc => {
-        data.push({ Personal_details: doc.data().product_selected })
-
         res.status(200).json({
-            status: data[0]
+            status: doc.data().cart
         })
     });
 }
 
-const updateUserCarts = async (req, res) => {
+function findCartTotal(products) {
+    let sum = 0
+    products.map((elem, index) => {
+        sum += (elem.price * elem.quantity)
+    })
+    return sum
+}
+
+const updateProductQuantity = async (req, res) => {
     // const user = firebase.auth().currentUser;
     // const uid = user.uid;
     const uid = req.body.userid
-    
+
     const db = firebase.firestore();
     const Users = db.collection("Users");
     const snapshot = await Users.where('userId', '==', uid).get();
 
-    let data = []
-    let other_prod_info = []
-    const users_data = {}
-    let total_amount = 0
-    let total_products = 0
-    let id = ''
+    let doc_id = ""
+    let cartObject = {}
     snapshot.forEach(doc => {
-        data.push(doc.data().product_selected)
-        id = doc.id
+        cartObject = doc.data().cart
+        doc_id = doc.id
     })
 
-    const ind = req.params.ind
-    delete req.body.ind
-    data[0][ind] = req.body
-    data[0].forEach(key => {
-        total_amount += key.price
-        total_products += 1
+    let requiredProduct = req.body.product
+
+    for (let i = 0; i < cartObject.product_selected.length; i++) {
+        if (requiredProduct.product_id === cartObject.product_selected[i].product_id) {
+            // found and update
+            cartObject.product_selected[i].quantity = requiredProduct.quantity
+            cartObject.total_amount = findCartTotal(cartObject.product_selected)
+
+            Users.doc(doc_id).update(
+                { cart: cartObject }
+            )
+            return res.status(200).json({
+                status: "Cart updated successfully"
+            })
+        }
+    }
+    return res.status(404).send({
+        status: "no such product"
+    })
+}
+
+const removeItemFromCart = async (req, res) => {
+    // const user = firebase.auth().currentUser;
+    // const uid = user.uid;
+    const uid = req.body.userid
+
+    const db = firebase.firestore();
+    const Users = db.collection("Users");
+
+    let doc_id = ''
+    let cartObject = {}
+    const snapshot = await Users.where('userId', '==', uid).get();
+    snapshot.forEach(doc => {
+        cartObject = doc.data().cart
+        doc_id = doc.id
+    });
+
+    let requiredProduct = req.body.product
+    let allProducts = cartObject.product_selected
+    let requiredArray = allProducts.filter((elem, index) => {
+        return elem.product_id != requiredProduct.product_id
     })
 
-    users_data["product_selected"] = data[0]
-    users_data["other_product_info"] = { total_amount: total_amount, total_products: total_products };
+    cartObject.total_amount = findCartTotal(requiredArray)
+    cartObject.total_products-=1
+    cartObject.product_selected = requiredArray
 
-    Users.doc(id).update(
-        users_data
+    Users.doc(doc_id).update(
+        { cart: cartObject }
     )
-
-    // console.log(users_data);
-    res.status(200).json({
+    return res.status(200).json({
         status: "Cart updated successfully"
     })
 }
 
-const deleteUserCarts = async (req, res) => {
-    // const user = firebase.auth().currentUser;
-    // const uid = user.uid;
-    const uid = req.body.userid
-    
-    const db = firebase.firestore();
-    const Users = db.collection("Users");
-
-    const data = []
-    let total_amount = 0
-    let total_products = 0
-    let id = ''
-    const users_data = {}
-    const snapshot = await Users.where('userId', '==', uid).get();
-    snapshot.forEach(doc => {
-        data.push(doc.data().product_selected)
-        id = doc.id
-
-
-        let product_id = req.params.product_id
-        data[0] = data[0].filter((item) => item.product_id !== product_id);
-
-        data[0].forEach(key => {
-            total_amount += key.price
-            total_products += 1
-        })
-
-        users_data["product_selected"] = data[0]
-        users_data["other_product_info"] = { total_amount: total_amount, total_products: total_products };
-
-        console.log(users_data)
-        Users.doc(id).update(
-            users_data
-        )
-
-        res.status(200).json({
-            status: "Product deleted successfully"
-        })
-    });
-}
-
 module.exports = {
-    userCarts,
+    addItemToCart,
     displayUserCarts,
-    updateUserCarts,
-    deleteUserCarts
+    updateProductQuantity,
+    removeItemFromCart
 }
