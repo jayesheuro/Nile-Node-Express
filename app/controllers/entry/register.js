@@ -10,6 +10,7 @@ module.exports.CustomerRegister = async (req, res) => {
     .then((userCredential) => {
       Users.add({
         userId: userCredential.user.uid,
+        isSeller :false,
         Address: [],
         other_product_info: '',
         product_selected: [],
