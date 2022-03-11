@@ -110,7 +110,6 @@ const deleteUserWatchlist = async (req, res) => {
         data.push(doc.data().watch_list)
         id = doc.id
 
-
         let product_id = req.params.product_id
         data[0] = data[0].filter((item) => item.product_id !== product_id);
 
