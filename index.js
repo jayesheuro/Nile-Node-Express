@@ -33,6 +33,7 @@ const CustomerOrdersRoutes = require('./app/routes/modules/customer_orders');
 const OrderRoutes = require('./app/routes/modules/order')
 const TransactionRecordRoutes = require('./app/routes/modules/transactionRecord')
 const RatingRoute = require('./app/routes/modules/rating')
+const AccessInventoryForProductRoute = require('./app/routes/modules/access_inventory_for_product')
 
 app.use('/api/login', loginRoute);
 app.use('/api/register', registerRoute);
@@ -47,6 +48,7 @@ app.use('/api/orders', CustomerOrdersRoutes)
 app.use('/api/transaction',TransactionRecordRoutes)
 app.use('/api/order',OrderRoutes)
 app.use('/api/rating',RatingRoute)
+app.use('/api/myproducts',AccessInventoryForProductRoute)
 
 // handling 404
 app.get('/',(req,res)=>{
