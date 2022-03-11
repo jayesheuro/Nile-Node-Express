@@ -331,14 +331,30 @@ const changeProductCategory = async (req, res) => {
   }
 };
 
-const deleteProduct = (req, res) => {
+const deleteProduct = async (req, res) => {
   let category = req.params.category;
   let product_id = req.params.id;
+  let uid = req.body.userid
 
   if (authCollectionName(category) === true) {
+    const db = firebase.firestore();
+    const Inventory = db.collection("Inventory");
+    products = []
+    const snapshot = await Inventory.where("userId", "==", uid).get();
+    snapshot.forEach((doc) => {
+      products = doc.data().products
+      id = doc.id;
+    });
+    
+    let reqProducts = products.filter((ele,index)=>{
+
+          return ele.product_id !== product_id
+        })
+      
+    Inventory.doc(id).update({products :reqProducts});
     let collection_name = getCollection(category);
     const collectionRef = mongoose.model(collection_name, ProductSchema);
-
+    
     collectionRef
       .findOneAndDelete({ product_id: mongoose.Types.ObjectId(product_id) })
       .then((doc) => {
@@ -438,10 +454,7 @@ const universalProductSearch = async (req, res) => {
       .select("-__v")
       .then((docs) => {
         if (docs.length > 0) {
-          // let dataObj = {
-          //     "category": availableCollections[i],
-          //     "data": docs
-          // }
+
           docs.map((doc, index) => {
             foundData.push(doc);
           });
