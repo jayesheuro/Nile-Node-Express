@@ -232,7 +232,8 @@ const displayCustomerOrders = async (req, res) => {
     console.log(data[0].orders.inventory_id)
   });
   res.status(200).json({
-    inventory_id : inventory_id
+    inventory_id : inventory_id ,
+    orders : data[0].orders
   });
 };
 
