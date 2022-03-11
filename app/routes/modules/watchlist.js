@@ -22,7 +22,7 @@ router.put(
   auth.checkAuthWithFirebase,
   WatchlistRoutes.updateUserWatchlist
 );
-router.delete(
+router.post(
   "/delete/:product_id",
   auth.checkAuthWithFirebase,
   WatchlistRoutes.deleteUserWatchlist
