@@ -3,7 +3,6 @@ const firebase = require("firebase");
 const { v4: uuidv4 } = require("uuid");
 
 const placeOrder = async (req, res) => {
-  console.log(req.body)
   // generate tracking id
   // mention buyer id, seller id, transaction id
   // add document to the Order collection
@@ -15,6 +14,8 @@ const placeOrder = async (req, res) => {
   const Users = db.collection("Users");
   const Sellers = db.collection("Sellers");
   const Inventory = db.collection("Inventory");
+
+  let tracking_id=""
 
   inv_id = "";
   const snapshot1 = await Sellers.where("sellerId", "==", uid).get();
@@ -55,7 +56,7 @@ const placeOrder = async (req, res) => {
       }
       users_data = doc.data();
       id = doc.id;
-      let tracking_id = uuidv4();
+      tracking_id = uuidv4();
       let transaction_id = req.body.transaction_id;
 
       orders = {
