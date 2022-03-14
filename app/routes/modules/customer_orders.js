@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 const auth = require('../../services/auth/firebaseAuth')
 
 router.post('/orders', auth.checkAuthWithFirebase, CustomerOrdersRoutes.addCustomerOrders);
-router.post('/', auth.checkAuthWithFirebase, CustomerOrdersRoutes.displayCustomerOrders);
+router.get('/', auth.checkAuthWithFirebase, CustomerOrdersRoutes.displayCustomerOrders);
 router.put('/update/:transaction_id', auth.checkAuthWithFirebase, CustomerOrdersRoutes.updateCustomerOrders);
 router.delete('/delete/:transaction_id', auth.checkAuthWithFirebase, CustomerOrdersRoutes.deleteCustomerOrders);
 

@@ -105,7 +105,16 @@ const placeOrder = async (req, res) => {
   });
 
   Userorders.push(orders);
-  await Users.doc(id).update({ orders: user_orders });
+  cart = {
+  
+      product_selected : [],
+      total_amount : 0,
+      total_products : 0
+ 
+  }
+
+  
+  await Users.doc(id).update({ orders: user_orders, cart });
 
   await Inventory.doc(id2).update({ Userorders });
 
