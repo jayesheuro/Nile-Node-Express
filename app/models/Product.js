@@ -36,6 +36,10 @@ const ProductSchema = mongoose.Schema({
         },size:{
             type: [String]
         }
+    },
+    inventory_id:{
+        type:String,
+        required:true
     }
 })
 

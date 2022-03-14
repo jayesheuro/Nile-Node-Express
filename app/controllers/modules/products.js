@@ -137,6 +137,7 @@ const createProduct = async (req, res) => {
       color: req.body.buying_options.color,
       size: req.body.buying_options.size,
     },
+    inventory_id : req.body.inventory_id
   });
 
   let saved_product = {};
